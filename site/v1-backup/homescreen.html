@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0972bc" />
+  <title>Add to Home Screen — Conversation Guide</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    :root { --est-blue:#0972bc; --ink:#0f172a; --muted:#475569; --line:#e2e8f0; --tint:#f0f9ff; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; max-width: 100%; overflow-x: clip; overflow-y: visible;
+      background: #fff; color: var(--ink);
+      font: 18px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+    }
+    a { color: var(--est-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .header {
+      background: var(--est-blue); color: #fff; padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .header .header-title { font-size: 1.05rem; font-weight: 800; }
+    .header a { color: #fff; font-size: .9rem; opacity: .9; }
+    .wrap { max-width: 640px; margin: 36px auto; padding: 0 22px 60px 22px; }
+    h1 { font-size: 1.7rem; font-weight: 800; color: var(--est-blue); margin: 0 0 6px 0; }
+    .sub { color: var(--muted); margin: 0 0 28px 0; }
+    .step-card {
+      background: var(--tint); border: 1px solid #bae0f5; border-radius: 16px;
+      padding: 20px 20px; margin-bottom: 18px;
+    }
+    .step-card h2 {
+      margin: 0 0 10px 0; font-size: 1.12rem; font-weight: 800; color: var(--est-blue);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .step-card ol { margin: 0; padding-left: 20px; }
+    .step-card li { margin-bottom: 7px; }
+    .platform-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 8px; background: #fff;
+      border: 1px solid #bae0f5; font-size: 1.1rem;
+    }
+    kbd {
+      background: #fff; border: 1px solid var(--line); border-radius: 6px;
+      padding: 1px 7px; font-family: inherit; font-size: .95em; font-weight: 600;
+    }
+    .footer {
+      margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
+      text-align: center; font-size: .88rem; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">Conversation Guide</div>
+    <div style="flex:1"></div>
+    <a href="/">&larr; Back</a>
+  </div>
+
+  <div class="wrap">
+    <h1>Add to Home Screen</h1>
+    <p class="sub">Keep the four questions one tap away. It installs like a normal app and works offline.</p>
+
+    <div class="step-card">
+      <h2><span class="platform-icon">&#63743;</span> iPhone / iPad (Safari)</h2>
+      <ol>
+        <li>Tap the <strong>Share</strong> button (the square with an up-arrow).</li>
+        <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+        <li>Tap <strong>Add</strong>.</li>
+      </ol>
+    </div>
+
+    <div class="step-card">
+      <h2><span class="platform-icon">&#9654;</span> Android (Chrome)</h2>
+      <ol>
+        <li>Tap the menu <kbd>&#8942;</kbd> in the top-right.</li>
+        <li>Tap <strong>Add to Home screen</strong> (or <strong>Install app</strong>).</li>
+        <li>Confirm.</li>
+      </ol>
+    </div>
+
+    <div class="step-card">
+      <h2><span class="platform-icon">&#128421;</span> Desktop (Chrome / Edge)</h2>
+      <ol>
+        <li>Click the <strong>install</strong> icon in the address bar, or open the menu <kbd>&#8942;</kbd>.</li>
+        <li>Choose <strong>Install</strong>.</li>
+      </ol>
+    </div>
+
+    <div class="footer">
+      <div><a href="/">&larr; Back to Conversation Guide</a></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Gesprächsleitfaden</title>
+  <meta name="description" content="Ein einfaches Werkzeug zur Vorbereitung auf bessere Gespräche." />
+  <meta name="theme-color" content="#FBF6EE" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Gesprächsleitfaden" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="../icon.svg" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #FBF6EE;
+      color: #2E2A25;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body {
+      touch-action: pan-y;
+    }
+
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 20px 18px 14px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.004em;
+    }
+
+    .subtitle {
+      margin: 0 0 16px;
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      color: #4A4138;
+    }
+
+    .lenses {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .lens-btn {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      padding: 10px 18px;
+      min-height: 46px;
+      border: 1.5px solid #BF6A4A;
+      border-radius: 999px;
+      background: #FBF6EE;
+      color: #A85638;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, font-weight 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .lens-btn:hover {
+      box-shadow: 0 2px 10px rgba(191, 106, 74, 0.15);
+    }
+
+    .lens-btn[aria-pressed="false"]:hover {
+      background: #FEF8F3;
+    }
+
+    .lens-btn[aria-pressed="true"] {
+      background: #BF6A4A;
+      border-color: #BF6A4A;
+      color: #FBF6EE;
+      font-weight: 600;
+    }
+
+    .lens-btn[aria-pressed="true"]:hover {
+      box-shadow: 0 2px 10px rgba(191, 106, 74, 0.25);
+    }
+
+    .lens-arrow {
+      color: #BF6A4A;
+      font-size: 1.2rem;
+    }
+
+    .guidance {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+      padding: 16px;
+      font-style: italic;
+      font-size: 1.35rem;
+      color: #A85638;
+      line-height: 1.3;
+      cursor: pointer;
+    }
+
+    .guidance.show {
+      display: block;
+    }
+
+    .questions {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .questions li {
+      display: flex;
+      gap: 0.4em;
+      align-items: baseline;
+      padding: 16px;
+      font-size: 1.45rem;
+      font-weight: 450;
+      line-height: 1.2;
+      color: #2E2A25;
+      background: #FFFDF8;
+      border: 1px solid #EBE3D4;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(46, 42, 37, 0.06);
+    }
+
+    .questions li .num {
+      flex: 0 0 auto;
+      font-weight: 600;
+      font-style: italic;
+      color: #BF6A4A;
+      font-size: 0.7em;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    footer a, footer button {
+      appearance: none;
+      background: none;
+      border: none;
+      padding: 8px 2px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-style: italic;
+      color: #857A6C;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1;
+    }
+
+    footer a:hover, footer button:hover {
+      color: #A85638;
+      text-decoration: underline;
+      text-decoration-color: #BF6A4A;
+      text-underline-offset: 4px;
+    }
+
+    .qr-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(46, 42, 37, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    .qr-overlay.show {
+      display: flex;
+    }
+
+    .qr-card {
+      background: #FBF6EE;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(46, 42, 37, 0.22);
+      padding: 26px;
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .qr-card img {
+      width: 220px;
+      max-width: 60vw;
+      height: auto;
+      display: block;
+      margin: 0 auto 14px;
+      border-radius: 8px;
+    }
+
+    .qr-card .qr-url {
+      font-size: 1rem;
+      font-style: italic;
+      color: #A85638;
+    }
+
+    .qr-card .qr-hint {
+      margin-top: 9px;
+      font-size: 0.82rem;
+      color: #857A6C;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(46, 42, 37, 0.35);
+      backdrop-filter: blur(1px);
+      opacity: 0;
+      transition: opacity 0.15s ease-out;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-box {
+      background: #FFFDF8;
+      border: 1px solid #EBE3D4;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(46, 42, 37, 0.15);
+      width: 100%;
+      max-width: 480px;
+      max-height: 80vh;
+      padding: 28px;
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.15s ease-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-overlay.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2E2A25;
+      margin: 0 0 16px 0;
+      padding-right: 32px;
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #2E2A25;
+    }
+
+    .modal-body p {
+      margin: 0 0 14px 0;
+    }
+
+    .modal-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-alternatives {
+      margin-top: 14px;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: #4A4138;
+    }
+
+    .modal-close {
+      appearance: none;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: none;
+      background: none;
+      color: #857A6C;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .modal-close:hover {
+      color: #A85638;
+    }
+
+    .subtitle {
+      cursor: pointer;
+    }
+
+    .lens-btn {
+      cursor: pointer;
+    }
+
+    .questions li {
+      cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+      .modal-box {
+        max-width: calc(100vw - 56px);
+        padding: 24px;
+      }
+
+      .modal-title {
+        font-size: 1.2rem;
+        padding-right: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="/de" style="color: inherit; text-decoration: none;">Gesprächsleitfaden</a></h1>
+      <p class="subtitle" role="button" tabindex="0" aria-label="Zwei Teile. Aktivieren für mehr.">Ein einfaches Werkzeug zur Vorbereitung auf bessere Gespräche – zuerst zuhören, dann antworten.</p>
+
+      <div class="lenses">
+        <button class="lens-btn" data-lens="listen" aria-pressed="true" aria-label="Zuerst zuhören. Aktivieren für mehr.">
+          <span>1</span> Zuhören
+        </button>
+        <span class="lens-arrow">→</span>
+        <button class="lens-btn" data-lens="respond" aria-pressed="false" aria-label="Dann antworten. Aktivieren für mehr.">
+          <span>2</span> Antworten
+        </button>
+      </div>
+
+      <div class="guidance" id="guidance"></div>
+    </header>
+
+    <main>
+      <ol class="questions">
+        <li role="button" tabindex="0" aria-label="Was denkst du? Aktivieren für mehr." data-modal="q1"><span class="num">1</span> <span>Was denkst du?</span></li>
+        <li role="button" tabindex="0" aria-label="Was hat dein Denken dazu geprägt? Aktivieren für mehr." data-modal="q2"><span class="num">2</span> <span>Was hat dein Denken dazu geprägt?</span></li>
+        <li role="button" tabindex="0" aria-label="Wie fühlst du dich dabei? Aktivieren für mehr." data-modal="q3"><span class="num">3</span> <span>Wie fühlst du dich dabei?</span></li>
+        <li role="button" tabindex="0" aria-label="Was würde es besser machen? Aktivieren für mehr." data-modal="q4"><span class="num">4</span> <span>Was würde es besser machen?</span></li>
+      </ol>
+    </main>
+
+    <footer>
+      <button id="qrBtn" type="button" aria-label="QR-Code anzeigen">QR</button>
+      <a href="about.html">Über uns</a>
+      <a href="privacy.html">Datenschutz</a>
+      <a href="homescreen.html">Zum Startbildschirm hinzufügen</a>
+      <a href="/" style="font-style: normal; margin-left: 4px;">EN</a>
+    </footer>
+  </div>
+
+  <div class="qr-overlay" id="qrOverlay">
+    <div class="qr-card">
+      <img src="../qr-conversation-guide.png" alt="QR-Code zu conversation.guide" />
+      <div class="qr-url">conversation.guide/de</div>
+      <div class="qr-hint">Tippe überall an, um zu schließen.</div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal-overlay" id="modal-subhead" role="dialog" aria-labelledby="modal-subhead-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-subhead-title">Zwei Teile</h2>
+      <div class="modal-body">
+        <p>Ein gutes Gespräch über Unterschiede hat eine Struktur. Zuerst verstehst du die andere Person. Dann machst du deinen eigenen Punkt, geprägt von dem, was du gehört hast.</p>
+        <p>Diese Reihenfolge ist wichtig. Wenn du zuerst zuhörst, passieren zwei Dinge: Die andere Person fühlt sich verstanden, und du lernst tatsächlich etwas, das deinen eigenen Punkt besser ankommen lässt. Die meisten Gespräche springen direkt zum zweiten Teil. Dieses verlangsamt absichtlich und macht den ersten Teil bewusst.</p>
+        <p>Dieselben vier Fragen, auf beide Arten genutzt. Klicke auf Zuhören und Antworten, um zu sehen, wie.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-listen" role="dialog" aria-labelledby="modal-listen-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-listen-title">Zuerst zuhören</h2>
+      <div class="modal-body">
+        <p>Das ist die erste Hälfte eines Gesprächs: Die vier Fragen nutzen, um die andere Person zu verstehen, bevor du sagst, was du denkst.</p>
+        <p>Stelle die Fragen unten nacheinander. Nach jeder Antwort, wiederhole das, was du gehört hast, mit deinen eigenen Worten, dann stelle eine Nachfrage aus echter Neugier, bevor du weitergehst. Beeile dich nicht.</p>
+        <p>Die Nachfrage ist das Herz davon. Du kannst keine echte Nachfrage zu etwas stellen, das du nicht wirklich gehört hast, daher ist es das sicherste Zeichen, dass du wirklich zuhörst, und es macht das Gespräch auch für dich interessanter.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-respond" role="dialog" aria-labelledby="modal-respond-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-respond-title">Dann antworten</h2>
+      <div class="modal-body">
+        <p>Das ist die zweite Hälfte: Sobald du die andere Person verstanden hast, machst du deinen eigenen Punkt, indem du dieselben vier Fragen an dich selbst stellst.</p>
+        <p>Beantworte sie für die andere Person, geprägt von dem, was du gerade gehört hast. Dann halte das Gespräch am Laufen: Gib es zurück, frage „Was denkst du?" und höre wieder zu.</p>
+        <p>Diese Rückgabe hält es als Gespräch statt als Schlussargument. Du versuchst nicht zu gewinnen. Du hältst das Gespräch lebendig.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1: Was denkst du? -->
+  <div class="modal-overlay" id="modal-q1-listen" role="dialog" aria-labelledby="modal-q1-listen-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q1-listen-title">Was denkst du?</h2>
+      <div class="modal-body">
+        <p>Die Eröffnung. Du lädst die andere Person ein, ihre Ansicht in ihren eigenen Worten auf den Tisch zu legen, bevor jemand argumentiert.</p>
+        <p>Stelle die Frage offen, dann mach dich aus dem Weg. Der Punkt ist nicht, eine Gegenrede vorzubereiten, sondern sie führen zu lassen und zu zeigen, dass du wirklich hören möchtest, wo sie landet. Widerstehe dem Drang, auf das erste zu reagieren, das sie sagt.</p>
+        <p class="modal-alternatives">Andere Arten zu fragen: „Wo landest du dabei?" · „Wie siehst du das?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-q1-respond" role="dialog" aria-labelledby="modal-q1-respond-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q1-respond-title">Was denkst du?</h2>
+      <div class="modal-body">
+        <p>Jetzt bist du dran und sagst, wo du landest, offen und ehrlich.</p>
+        <p>Du hast sie gehört, also kannst du deinen Punkt machen, ohne dich auf einen Kampf vorzubereiten. Sag, was du wirklich denkst, geprägt von dem, was du gerade gelernt hast. Du musst nicht zustimmen, und du musst den Widerspruch nicht heucheln.</p>
+        <p class="modal-alternatives">Andere Arten zu sagen: „So sehe ich das." · „Das ist mein Standpunkt."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2: Was hat dein Denken dazu geprägt? -->
+  <div class="modal-overlay" id="modal-q2-listen" role="dialog" aria-labelledby="modal-q2-listen-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q2-listen-title">Was hat dein Denken dazu geprägt?</h2>
+      <div class="modal-body">
+        <p>Dies geht unter ihre Meinung zu den Erfahrungen, Geschichten und Einflüssen, die sie dorthin gebracht haben.</p>
+        <p>Sie ist sorgfältig formuliert. „Was hat dein Denken geprägt?" lädt die Geschichte hinter einer Ansicht ein, nicht eine Verteidigung davon. Fragen wie „warum sagst du das?" können Menschen das Gefühl geben, sie seien vor Gericht. Diese Frage behält einen warmen Ton bei und funktioniert, egal ob die Person aus erster Hand Erfahrung hat oder einfach starke Überzeugungen hat.</p>
+        <p>Dies ist der Schritt, bei dem du verlangsamen solltest. Wenn die erste Antwort allgemein ist, bleib dabei und stelle eine sanfte Nachfrage aus echtem Interesse.</p>
+        <p class="modal-alternatives">Andere Arten zu fragen: „Gibt es einen Moment, der dir besonders im Gedächtnis geblieben ist?" · „Wie bist du zu dieser Sicht gekommen?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-q2-respond" role="dialog" aria-labelledby="modal-q2-respond-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q2-respond-title">Was hat dein Denken dazu geprägt?</h2>
+      <div class="modal-body">
+        <p>Teile, was deine Ansicht geprägt hat: die Erfahrung, die Geschichte, das, was du gelesen oder erlebt hast, das dich dorthin gebracht hat.</p>
+        <p>Hier wird dein Punkt real. Eine Meinung ist leicht zu argumentieren; eine Geschichte ist schwerer zu ignorieren. Und nachdem du gehört hast, was ihre Denkweise geprägt hat, kannst du deine im gleichen ehrlichen Geist anbieten, als ein weiteres Stück des Bildes statt als Gegenangriff.</p>
+        <p class="modal-alternatives">Andere Arten zu sagen: „So bin ich zu dieser Sicht gekommen." · „Etwas ist mir passiert, das mir in Erinnerung blieb."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3: Wie fühlst du dich dabei? -->
+  <div class="modal-overlay" id="modal-q3-listen" role="dialog" aria-labelledby="modal-q3-listen-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q3-listen-title">Wie fühlst du dich dabei?</h2>
+      <div class="modal-body">
+        <p>Das geht über sachliche Argumente hinaus zu dem Gefühl darunter: nicht nur, was sie denken, sondern wie es sich bei ihr anfühlt.</p>
+        <p>In Gefühlen liegt oft echtes Verständnis. Die Position einer Person zeigt, wo sie steht; ihre Gefühle zeigen, warum es zählt. Und wenn jemand sein Gefühl ausspricht, hilft das oft, chaotische Erfahrungen einzuordnen. Diese Frage kann ihr also helfen, selbst Klarheit zu finden, nicht nur sie mit dir zu teilen.</p>
+        <p>Frag sanft, und dränge nicht, wenn es sich zu direkt anfühlt. Manchmal ist „Wie fühlst du dich dabei?" genau richtig; manchmal „Was sagt dein Bauchgefühl?" kommt besser an. So oder so lädst du sie ein, offener zu sein, als eine Debatte erlauben würde.</p>
+        <p class="modal-alternatives">Andere Arten zu fragen: „Wie sitzt das bei dir?" · „Was sagt dein Bauchgefühl dazu?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-q3-respond" role="dialog" aria-labelledby="modal-q3-respond-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q3-respond-title">Wie fühlst du dich dabei?</h2>
+      <div class="modal-body">
+        <p>Sag jetzt, wie du dich dabei fühlst, ehrlich.</p>
+        <p>Das ist oft das Entwaffnendste, was du tun kannst. Nachdem du gehört hast, wie sie sich fühlt, dein eigenes Gefühl zu benennen – nicht nur dein Argument – behält euch zwei Menschen statt zwei Positionen. Es zeigt, dass du als Person darin bist, nicht als Debattant. Du musst nicht ein Gefühl spielen, das du nicht hast; sei einfach ehrlich, wie es sich wirklich bei dir anfühlt.</p>
+        <p class="modal-alternatives">Andere Arten zu sagen: „So sitzt das bei mir." · „Um ehrlich zu sein, mein Bauchgefühl dazu ist...""</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4: Was würde es besser machen? -->
+  <div class="modal-overlay" id="modal-q4-listen" role="dialog" aria-labelledby="modal-q4-listen-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q4-listen-title">Was würde es besser machen?</h2>
+      <div class="modal-body">
+        <p>Die zukunftsorientierte Frage. Sie dreht das Gespräch vom Problem zu einem möglichen Weg, wie die andere Person es sieht.</p>
+        <p>Stelle sie offen, mit noch keiner eigenen Agenda. Sie ist keine Forderung oder Debatte, nur eine Einladung, sich eine bessere Version der Situation vorzustellen. Oft sind Menschen hier weicher und konstruktiver als irgendwo sonst im Gespräch, und was sie sagen, kann dich überraschen.</p>
+        <p class="modal-alternatives">Andere Arten zu fragen: „Wie würde ein gutes Ergebnis aussehen?" · „Wo könnten wir von hier aus gehen?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-q4-respond" role="dialog" aria-labelledby="modal-q4-respond-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-q4-respond-title">Was würde es besser machen?</h2>
+      <div class="modal-body">
+        <p>Biete jetzt deine eigene Sicht an, wie die Dinge besser werden könnten, geprägt von dem, was du gerade von ihr gehört hast.</p>
+        <p>Dies ist der Ort, wo sich die beiden Hälften treffen können. Du hast gehört, wie ein besseres Ergebnis für sie aussieht; jetzt füge deine Sicht hinzu. Sehr oft gibt es überraschende Überlappungen hier, auch nachdem ihr über alles andere nicht einig wart, und dieser gemeinsame Grund ist genau der Ort, wo ein echtes Gespräch weitergehen kann. Dann gib es zurück: „Was denkst du?"</p>
+        <p class="modal-alternatives">Andere Arten zu sagen: „Ich denke, das würde helfen." · „Ich glaube, das könnte helfen."</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const guidanceTexts = {
+      listen: "Stelle die Fragen eine nach der anderen. Wiederhole nach jeder Antwort, was du gehört hast. Wenn es mehr zu sagen gibt, stelle eine Nachfrage. Bleib in dieser Phase für alle vier, dann wechsel zu Antworten.",
+      respond: "Jetzt bist du an der Reihe. Antworte auf dieselben vier Fragen selbst, geprägt von dem, was du gerade gehört hast. Dann gib es zurück: frage \"Was denkst du?\" und höre wieder zu."
+    };
+
+    const buttons = document.querySelectorAll('.lens-btn');
+    const guidance = document.getElementById('guidance');
+    let activeLens = 'listen';
+    let activeModal = null;
+
+    function setLens(lens) {
+      activeLens = lens;
+      buttons.forEach(b => {
+        b.setAttribute('aria-pressed', String(b.dataset.lens === activeLens));
+      });
+      guidance.textContent = guidanceTexts[activeLens];
+      guidance.classList.add('show');
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lens = btn.dataset.lens;
+        setLens(lens);
+      });
+    });
+
+    // Initialize on page load with Listen active
+    setLens('listen');
+
+    // Modal functionality
+    function openModal(modalId) {
+      closeModal();
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        activeModal = modal;
+        modal.classList.add('show');
+        const closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) closeBtn.focus();
+      }
+    }
+
+    function closeModal() {
+      if (activeModal) {
+        activeModal.classList.remove('show');
+        activeModal = null;
+      }
+    }
+
+    // Subtitle modal
+    const subtitle = document.querySelector('.subtitle');
+    subtitle.addEventListener('click', () => openModal('modal-subhead'));
+    subtitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal('modal-subhead');
+      }
+    });
+
+
+    // Guidance text modal (when Listen or Respond guidance is shown)
+    guidance.addEventListener('click', () => {
+      if (activeLens === 'listen') openModal('modal-listen');
+      if (activeLens === 'respond') openModal('modal-respond');
+    });
+    guidance.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (activeLens === 'listen') openModal('modal-listen');
+        if (activeLens === 'respond') openModal('modal-respond');
+      }
+    });
+
+    // Question modals (lens-dependent)
+    document.querySelectorAll('.questions li').forEach(li => {
+      li.addEventListener('click', () => {
+        const modalId = li.dataset.modal;
+        if (modalId) {
+          const lens = activeLens || 'listen';
+          openModal('modal-' + modalId + '-' + lens);
+        }
+      });
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const modalId = li.dataset.modal;
+          if (modalId) {
+            const lens = activeLens || 'listen';
+            openModal('modal-' + modalId + '-' + lens);
+          }
+        }
+      });
+    });
+
+    // Close modal buttons
+    document.querySelectorAll('.modal-close').forEach(btn => {
+      btn.addEventListener('click', closeModal);
+    });
+
+    // Backdrop close
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+      });
+    });
+
+    // Escape key closes modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (activeModal) {
+          closeModal();
+        }
+      }
+    });
+
+    // QR code modal
+    const qrBtn = document.getElementById('qrBtn');
+    const qrOverlay = document.getElementById('qrOverlay');
+
+    qrBtn.addEventListener('click', () => {
+      qrOverlay.classList.add('show');
+    });
+
+    qrOverlay.addEventListener('click', () => {
+      qrOverlay.classList.remove('show');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        qrOverlay.classList.remove('show');
+      }
+    });
+
+    // Unregister any existing service workers (dev mode)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => reg.unregister());
+      });
+    }
+  </script>
+</body>
+</html>

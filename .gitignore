@@ -1,0 +1,19 @@
+# Logs
+apache-*.log*
+*.log
+
+# Caches
+__pycache__/
+*.pyc
+.DS_Store
+
+# Env files
+.env
+.env.local
+
+# Backups
+backups/
+
+# IDE
+.vscode/
+.idea/

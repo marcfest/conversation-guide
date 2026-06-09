@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0972bc" />
+  <title>Privacy — Conversation Guide</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    :root { --est-blue:#0972bc; --ink:#0f172a; --muted:#475569; --line:#e2e8f0; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; max-width: 100%; overflow-x: clip; overflow-y: visible;
+      background: #fff; color: var(--ink);
+      font: 18px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+    }
+    a { color: var(--est-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .header {
+      background: var(--est-blue); color: #fff; padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .header .header-title { font-size: 1.05rem; font-weight: 800; }
+    .header a { color: #fff; font-size: .9rem; opacity: .9; }
+    .wrap { max-width: 700px; margin: 36px auto; padding: 0 22px 60px 22px; }
+    h1 { font-size: 1.7rem; font-weight: 800; color: var(--est-blue); margin: 0 0 6px 0; }
+    .effective { font-size: .88rem; color: var(--muted); margin-bottom: 30px; }
+    h2 {
+      font-size: 1.1rem; font-weight: 700; color: var(--est-blue);
+      margin: 30px 0 9px 0; padding-bottom: 6px; border-bottom: 2px solid var(--line);
+    }
+    p { margin: 0 0 14px 0; }
+    ul { margin: 0 0 14px 0; padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    .highlight-box {
+      background: #f0f9ff; border: 2px solid var(--est-blue); border-radius: 10px;
+      padding: 16px 20px; margin-bottom: 26px; font-weight: 500;
+    }
+    .footer {
+      margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--line);
+      text-align: center; font-size: .88rem; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">Conversation Guide</div>
+    <div style="flex:1"></div>
+    <a href="/">&larr; Back</a>
+  </div>
+
+  <div class="wrap">
+    <h1>Privacy</h1>
+    <p class="effective">Effective date: June 2026 &nbsp;·&nbsp; <a href="https://conversation.guide">conversation.guide</a></p>
+
+    <div class="highlight-box">
+      The short version: we do not collect, store, or transmit any personal data. Everything you type
+      stays on your own device.
+    </div>
+
+    <h2>What we collect</h2>
+    <p>Nothing. Conversation Guide does not use cookies, analytics, tracking pixels, or any third-party
+      data services.</p>
+
+    <h2>Local storage</h2>
+    <p>Your browser's <strong>localStorage</strong> is used solely to keep your own work for you between
+      visits. Specifically, we store on your device:</p>
+    <ul>
+      <li><strong>Your prepared answers</strong> to the four questions, and</li>
+      <li><strong>Your mental movie</strong> note.</li>
+    </ul>
+    <p>This data never leaves your device and is not sent to any server. You can erase it any time with
+      the "Clear" button, or by clearing your browser's site data for conversation.guide.</p>
+
+    <h2>No analytics</h2>
+    <p>We do not use Google Analytics, Plausible, Mixpanel, or any other analytics platform. We do not
+      track page views, sessions, or behavior.</p>
+
+    <h2>No cookies</h2>
+    <p>We set no cookies — not for tracking, not for preferences, not for any purpose.</p>
+
+    <h2>Offline use</h2>
+    <p>This app installs a service worker so it can work offline once loaded. The cache holds only the
+      app's own files (this page and its icons) on your device. It transmits nothing about you.</p>
+
+    <h2>Children's privacy</h2>
+    <p>This tool is not directed at children under 13, and we do not knowingly collect any information
+      from children.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If we ever change this policy meaningfully, we will update the effective date above. Since we
+      collect no data, any change can only expand, not reduce, your privacy.</p>
+
+    <h2>Contact</h2>
+    <p>Questions? Reach us at <a href="https://est.io" target="_blank" rel="noopener">est.io</a>.</p>
+
+    <div class="footer">
+      <div>&copy; <span id="year">2026</span> &middot; conversation.guide</div>
+      <div style="margin-top:8px"><a href="/">&larr; Back to Conversation Guide</a></div>
+    </div>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

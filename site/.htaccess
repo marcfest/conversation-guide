@@ -1,0 +1,8 @@
+# DEV MODE: don't let anything cache while we're iterating heavily.
+# (Note: Cloudflare's edge may still cache static extensions per its zone
+#  defaults — purge the CF cache or use Development Mode for those.)
+# Tighten this back up before launch.
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+  Header set Pragma "no-cache"
+</IfModule>

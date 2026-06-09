@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0972bc" />
+  <meta name="description" content="Four questions to prepare, listen, and respond — a reference card for the conversation framework." />
+  <title>Conversation Guide</title>
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Conversation Guide" />
+
+  <style>
+    :root {
+      --paper: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #e2e8f0;
+      --primary: #0972bc;
+      --est-blue: #0972bc;
+      --est-blue-light: #3b9dd8;
+      --est-blue-lighter: #bae0f5;
+      --tint: #f0f9ff;
+      --pill: #0f172a10;
+      --shadow: 0 6px 24px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.06);
+      --radius: 18px;
+      --radius-lg: 22px;
+      --alert-red: #dc2626;
+      --alert-bg: #fef2f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    /* --- Viewport stability: lock the horizontal axis so nothing wiggles on a phone.
+       Use overflow-x:clip (not hidden) so the page stays a single normal vertical
+       scroller — `hidden` on both html and body creates rival scroll containers that
+       swallow wheel/trackpad scrolling on desktop. --- */
+    html, body {
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      overflow-x: clip;
+      overflow-y: visible;
+      overscroll-behavior-y: none;
+      background: #fff;
+      color: var(--ink);
+      font: 19px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 680px;
+      width: 100%;
+      margin-inline: auto;
+      padding: 24px 22px 0 22px;
+    }
+
+    /* ---------------- Splash (provisional, isolated, auto-dismiss < 1s) ---------------- */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: var(--est-blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+      transition: opacity .35s ease;
+      padding: 24px;
+      text-align: center;
+    }
+    #splash.hide { opacity: 0; pointer-events: none; }
+    #splash .wordmark { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; }
+    #splash .tag { font-size: .95rem; opacity: .85; font-weight: 500; }
+
+    /* ---------------- The card ---------------- */
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 30px 26px 34px 26px;
+      margin-top: 8px;
+    }
+    .card .title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--est-blue);
+      margin: 0;
+    }
+    .card .lede {
+      margin: 4px 0 26px 0;
+      color: var(--muted);
+      font-size: .98rem;
+      font-weight: 500;
+    }
+    .questions {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: q;
+    }
+    .questions li {
+      counter-increment: q;
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+      padding: 16px 6px;
+      border-radius: 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      /* allow vertical scroll, never let a row capture a horizontal pan */
+      touch-action: pan-y;
+      transition: background .15s ease;
+    }
+    .questions li:active { background: var(--tint); }
+    .questions li .num {
+      flex: 0 0 auto;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--est-blue-light);
+      min-width: 1.1em;
+      font-variant-numeric: tabular-nums;
+    }
+    .questions li .num::before { content: counter(q) "."; }
+    .questions li .q {
+      font-size: 1.4rem;
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    /* ---------------- Section scaffolding ---------------- */
+    section { margin-top: 38px; }
+    .section-label {
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--est-blue);
+      margin: 0 0 12px 2px;
+    }
+
+    /* ---------------- Three-mode triad ---------------- */
+    .triad {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .triad .mode {
+      flex: 1 1 0;
+      background: var(--tint);
+      border: 1px solid var(--est-blue-lighter);
+      border-radius: 14px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .triad .mode .name {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--est-blue);
+      letter-spacing: -0.01em;
+    }
+    .triad .mode .when {
+      display: block;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+    .triad .arrow {
+      flex: 0 0 auto;
+      align-self: center;
+      color: var(--est-blue-light);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    /* ---------------- Orientation ---------------- */
+    .orientation {
+      margin-top: 20px;
+      color: var(--ink);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    /* ---------------- Fields (mental movie + prepare) ---------------- */
+    .field { margin-top: 22px; }
+    .field .q-label {
+      font-size: 1.12rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .field .helper {
+      margin: 5px 0 9px 0;
+      font-size: .92rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .field .helper strong { color: var(--ink); }
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+      font: inherit;
+      font-size: 1rem;
+      color: var(--ink);
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      min-height: 3.2em;
+      resize: none;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.5;
+      transition: border-color .15s ease;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--est-blue);
+    }
+
+    .movie-card {
+      background: var(--tint);
+      border: 1px solid var(--est-blue-lighter);
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      margin-top: 14px;
+    }
+    .movie-card textarea { background: #fff; }
+
+    /* ---------------- Status + buttons ---------------- */
+    .save-status {
+      height: 1.2em;
+      margin-top: 12px;
+      font-size: .85rem;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity .3s ease;
+      text-align: right;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      font: inherit;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 12px;
+      padding: 13px 20px;
+      border: 1.5px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      min-height: 48px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: var(--est-blue);
+      border-color: var(--est-blue);
+      color: #fff;
+      flex: 1 1 auto;
+    }
+    .btn-primary.copied { background: #16a34a; border-color: #16a34a; }
+    .btn-clear { color: var(--muted); }
+    .btn-clear.confirm { background: var(--alert-red); border-color: var(--alert-red); color: #fff; }
+
+    /* ---------------- Footer ---------------- */
+    footer {
+      margin-top: 52px;
+      padding: 30px 22px 40px 22px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    footer .qr {
+      margin: 0 auto 18px auto;
+      max-width: 170px;
+    }
+    footer .qr img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+    }
+    footer .qr .cap {
+      font-size: .8rem;
+      margin-top: 8px;
+      color: var(--muted);
+    }
+    footer .links { margin-bottom: 10px; }
+    footer .links a { margin: 0 8px; font-weight: 600; }
+    footer .copyright { font-size: .82rem; opacity: .85; }
+
+    /* ---------------- Modals (hidden tap-to-expand) ---------------- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: rgba(15,23,42,.45);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      width: 100%;
+      max-width: 640px;
+      max-height: 92vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border-radius: 20px 20px 0 0;
+      padding: 26px 24px calc(28px + env(safe-area-inset-bottom)) 24px;
+      box-shadow: 0 -10px 40px rgba(15,23,42,.25);
+    }
+    @media (min-width: 560px) {
+      .modal-backdrop { align-items: center; padding: 24px; }
+      .modal { border-radius: 20px; }
+    }
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+    .modal-head h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin: 0;
+      flex: 1;
+      line-height: 1.25;
+    }
+    .modal-close {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: var(--pill);
+      color: var(--ink);
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .modal .essence { font-size: 1.04rem; line-height: 1.55; margin: 10px 0 18px 0; }
+    .modal h3 {
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--est-blue);
+      margin: 18px 0 7px 0;
+    }
+    .modal .phrasings {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .modal .phrasings li {
+      background: var(--tint);
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-style: italic;
+      font-size: .98rem;
+    }
+    .modal p { margin: 0 0 12px 0; line-height: 1.55; }
+    .modal .nugget { color: var(--ink); }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 420px) {
+      body { font-size: 18px; }
+      .questions li .q { font-size: 1.26rem; }
+      .card { padding: 26px 20px 30px 20px; }
+      .triad { gap: 5px; }
+      .triad .mode { padding: 12px 7px; }
+      .triad .mode .name { font-size: .9rem; }
+      .triad .arrow { font-size: .9rem; }
+      footer .qr { display: none; } /* on a narrow phone you're the holder, not the scanner */
+    }
+
+    /* ---------------- Print ---------------- */
+    @media print {
+      #splash, .triad, .actions, .save-status, footer .qr, .btn { display: none !important; }
+      body { font-size: 12pt; }
+      .card { box-shadow: none; border: 1px solid #ccc; }
+      textarea { border: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Splash (provisional — remove this block + its <script> to disable) ===== -->
+  <div id="splash" aria-hidden="true">
+    <div class="wordmark">Conversation Guide</div>
+    <div class="tag">Four questions to prepare, listen, and respond.</div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ===== The card ===== -->
+    <div class="card" id="card">
+      <p class="title">Conversation Guide</p>
+      <p class="lede">Four questions to prepare, listen, and respond.</p>
+      <ul class="questions" id="questions">
+        <li data-modal="m1"><span class="num"></span><span class="q">What do you think?</span></li>
+        <li data-modal="m2"><span class="num"></span><span class="q">What has been your experience?</span></li>
+        <li data-modal="m3"><span class="num"></span><span class="q">What does that mean to you?</span></li>
+        <li data-modal="m4"><span class="num"></span><span class="q">What would help?</span></li>
+      </ul>
+    </div>
+
+    <!-- ===== Three-mode triad (the core insight, static) ===== -->
+    <section aria-label="The three uses">
+      <div class="triad">
+        <div class="mode">
+          <span class="name">Prepare</span>
+          <span class="when">beforehand — answer the four yourself</span>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+        <div class="mode">
+          <span class="name">Listen</span>
+          <span class="when">ask them the four, to understand</span>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+        <div class="mode">
+          <span class="name">Respond</span>
+          <span class="when">answer the four to make your point</span>
+        </div>
+      </div>
+      <p class="orientation">
+        These four questions spark a conversation — they don't script the whole thing. Ask them to
+        understand the other person. Then answer the same four to make your own point. Go in order, and
+        don't rush: stay with each question, and ask a follow-up before moving on.
+      </p>
+    </section>
+
+    <!-- ===== Mental movie (moved up: recall sits next to what's recalled) ===== -->
+    <section aria-label="Your mental movie">
+      <p class="section-label">Your mental movie</p>
+      <div class="movie-card">
+        <p class="helper" style="margin-top:0">The scene you invented to remember the four questions.</p>
+        <textarea id="movie" data-key="movie" placeholder="Write your scene here&hellip;" aria-label="Your mental movie"></textarea>
+      </div>
+    </section>
+
+    <!-- ===== Prepare worksheet ===== -->
+    <section aria-label="Prepare your answers">
+      <p class="section-label">Prepare</p>
+      <p class="orientation" style="margin-top:0;font-size:.95rem;color:var(--muted)">
+        Readiness, not a script — light notes you'll draw on flexibly.
+      </p>
+
+      <div class="field">
+        <div class="q-label">What do you think?</div>
+        <p class="helper">Your main point, in one clear sentence.</p>
+        <textarea data-key="think" aria-label="What do you think?"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="q-label">What has been your experience?</div>
+        <p class="helper">
+          <strong>Get concrete.</strong> Specifics let the other person "see" what you mean. Reach for:
+          a time ("last Tuesday," not "recently"), a place ("our downtown clinic," not "our location"),
+          a number with context ("374 families," not "hundreds"), a name, a quote, or a visual detail.
+          Drop two or three of these concrete "nuggets" rather than telling a long story.
+        </p>
+        <textarea data-key="experience" aria-label="What has been your experience?"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="q-label">What does that mean to you?</div>
+        <p class="helper">Why it matters to you — the significance behind your point.</p>
+        <textarea data-key="meaning" aria-label="What does that mean to you?"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="q-label">What would help?</div>
+        <p class="helper">What you'd suggest, or what you hope happens next. Keep it open, not a demand.</p>
+        <textarea data-key="help" aria-label="What would help?"></textarea>
+      </div>
+
+      <div class="save-status" id="save-status">Saved on this device</div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="copy-btn" type="button">Copy everything</button>
+        <button class="btn btn-clear" id="clear-btn" type="button">Clear</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="qr">
+      <img src="qr-conversation-guide.png" alt="QR code to conversation.guide" />
+      <div class="cap">Scan to open on a phone</div>
+    </div>
+    <div class="links">
+      <a href="homescreen.html">Add to Home Screen</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <div class="copyright">&copy; <span id="year">2026</span> &middot; conversation.guide</div>
+  </footer>
+
+  <!-- ===== Modals (hidden tap-to-expand on each question) ===== -->
+  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal" id="modal-body" tabindex="-1"></div>
+  </div>
+
+  <script>
+    /* ---- Modal content (kept in JS so it can also feed Copy-all) ---- */
+    var MODALS = {
+      m1: {
+        title: "What do you think?",
+        essence: "You're looking for the other person's main point — or clarifying your own.",
+        phrasings: ["Where do you land on this?", "How do you see it?"],
+        strongLabel: "A strong answer",
+        strong: "One clear point, not five hedged ones."
+      },
+      m2: {
+        title: "What has been your experience?",
+        essence: "You're after the concrete experience behind the view — what they've actually seen, lived, or been told. This is the heart of the method.",
+        phrasings: ["Has there been a moment that stuck with you?", "When did you first notice this?"],
+        strongLabel: "What a strong answer sounds like",
+        strong: "Specifics that let you <em>see</em> it — a time (\"last Tuesday,\" not \"recently\"), a place (\"our downtown clinic,\" not \"our location\"), a number with context (\"374 families,\" not \"hundreds\"), a name, a quote, a visual detail. Two or three concrete \"nuggets\" beat a long story.",
+        extraLabel: "The dwell move",
+        extra: "This is the question to slow down on. If the first answer is general, follow up warmly — \"Tell me more about that,\" \"What happened?\" — to draw out the specific. Don't ask for \"evidence\" or \"proof\"; that sounds like a challenge. Ask out of interest."
+      },
+      m3: {
+        title: "What does that mean to you?",
+        essence: "You're listening for why it matters — the significance underneath the point.",
+        phrasings: ["Why does that matter to you?", "What's at stake for you there?"],
+        strongLabel: "A strong answer",
+        strong: "Connects the experience to something the person cares about."
+      },
+      m4: {
+        title: "What would help?",
+        essence: "You're after the underlying need or hoped-for next step — not a demand for action. \"What would help?\" stays open even when people still disagree; it surfaces common ground without forcing it.",
+        phrasings: ["What would make this better?", "What are you hoping for?"],
+        strongLabel: "A strong answer",
+        strong: "Names a need or a small next step, not an ultimatum."
+      }
+    };
+
+    /* ---- Modal open/close ---- */
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalBody = document.getElementById('modal-body');
+    var lastFocused = null;
+
+    function buildModal(key) {
+      var m = MODALS[key];
+      var html = '';
+      html += '<div class="modal-head"><h2>' + m.title + '</h2>';
+      html += '<button class="modal-close" type="button" aria-label="Close" id="modal-close">&times;</button></div>';
+      html += '<p class="essence">' + m.essence + '</p>';
+      html += '<h3>Alternate phrasings</h3><ul class="phrasings">';
+      m.phrasings.forEach(function(p) { html += '<li>' + p + '</li>'; });
+      html += '</ul>';
+      html += '<h3>' + m.strongLabel + '</h3><p class="nugget">' + m.strong + '</p>';
+      if (m.extra) {
+        html += '<h3>' + m.extraLabel + '</h3><p>' + m.extra + '</p>';
+      }
+      return html;
+    }
+
+    function openModal(key) {
+      lastFocused = document.activeElement;
+      modalBody.innerHTML = buildModal(key);
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      modalBody.scrollTop = 0;
+      modalBody.focus();
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    document.getElementById('questions').addEventListener('click', function(e) {
+      var li = e.target.closest('li[data-modal]');
+      if (li) openModal(li.getAttribute('data-modal'));
+    });
+    backdrop.addEventListener('click', function(e) {
+      if (e.target === backdrop) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+    });
+
+    /* ---- Auto-grow textareas (iOS-safe: measure from 1px, not auto) ---- */
+    function autoGrow(ta) {
+      if (!ta) return;
+      ta.style.height = '1px';
+      var cs = window.getComputedStyle(ta);
+      var minH = parseFloat(cs.minHeight) || 0;
+      ta.style.height = Math.max(ta.scrollHeight, minH) + 'px';
+    }
+
+    /* ---- Persistence ---- */
+    var STORAGE_KEY = 'cg_draft_v1';
+    var FIELDS = Array.prototype.slice.call(document.querySelectorAll('textarea[data-key]'));
+    var saveTimeout = null;
+    var memoryStore = null; // fallback when localStorage is unavailable (e.g. artifact sandbox)
+
+    function storageGet() {
+      try { return localStorage.getItem(STORAGE_KEY); }
+      catch (e) { return memoryStore; }
+    }
+    function storageSet(v) {
+      try { localStorage.setItem(STORAGE_KEY, v); }
+      catch (e) { memoryStore = v; }
+    }
+    function storageRemove() {
+      try { localStorage.removeItem(STORAGE_KEY); }
+      catch (e) { memoryStore = null; }
+    }
+
+    function collect() {
+      var data = {};
+      FIELDS.forEach(function(ta) { data[ta.getAttribute('data-key')] = ta.value; });
+      return data;
+    }
+
+    function save() { storageSet(JSON.stringify(collect())); }
+
+    function load() {
+      var saved = storageGet();
+      if (!saved) return;
+      try {
+        var data = JSON.parse(saved);
+        FIELDS.forEach(function(ta) {
+          var k = ta.getAttribute('data-key');
+          if (data[k]) ta.value = data[k];
+        });
+      } catch (e) { /* ignore corrupt draft */ }
+    }
+
+    function showSaved() {
+      var s = document.getElementById('save-status');
+      s.style.opacity = '1';
+      clearTimeout(s._t);
+      s._t = setTimeout(function() { s.style.opacity = '0'; }, 2000);
+    }
+
+    function onInput(ta) {
+      autoGrow(ta);
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(save, 1000);
+      showSaved();
+    }
+
+    FIELDS.forEach(function(ta) {
+      ['input', 'change', 'paste'].forEach(function(ev) {
+        ta.addEventListener(ev, function() {
+          if (ev === 'paste') setTimeout(function() { onInput(ta); }, 10);
+          else onInput(ta);
+        });
+      });
+      ta.addEventListener('focus', function() { autoGrow(ta); });
+    });
+
+    /* ---- Copy everything: a clean, formatted document ---- */
+    function stripTags(s) { return s.replace(/<[^>]+>/g, ''); }
+
+    function buildCopyText() {
+      var data = collect();
+      var L = [];
+      L.push('CONVERSATION GUIDE');
+      L.push('Four questions to prepare, listen, and respond.');
+      L.push('');
+      L.push('=== THE FOUR QUESTIONS ===');
+      L.push('1. What do you think?');
+      L.push('2. What has been your experience?');
+      L.push('3. What does that mean to you?');
+      L.push('4. What would help?');
+      L.push('');
+      L.push('=== DEEPER GUIDANCE ===');
+      ['m1', 'm2', 'm3', 'm4'].forEach(function(k, i) {
+        var m = MODALS[k];
+        L.push('');
+        L.push((i + 1) + '. ' + m.title);
+        L.push('   Essence: ' + stripTags(m.essence));
+        L.push('   Other ways to ask: ' + m.phrasings.join('  /  '));
+        L.push('   ' + m.strongLabel + ': ' + stripTags(m.strong));
+        if (m.extra) L.push('   ' + m.extraLabel + ': ' + stripTags(m.extra));
+      });
+      L.push('');
+      L.push('=== MY PREPARED ANSWERS ===');
+      L.push('');
+      L.push('What do you think?');
+      L.push((data.think || '').trim() || '—');
+      L.push('');
+      L.push('What has been your experience?');
+      L.push((data.experience || '').trim() || '—');
+      L.push('');
+      L.push('What does that mean to you?');
+      L.push((data.meaning || '').trim() || '—');
+      L.push('');
+      L.push('What would help?');
+      L.push((data.help || '').trim() || '—');
+      L.push('');
+      L.push('=== MY MENTAL MOVIE ===');
+      L.push((data.movie || '').trim() || '—');
+      L.push('');
+      L.push('conversation.guide');
+      return L.join('\n');
+    }
+
+    var copyBtn = document.getElementById('copy-btn');
+    copyBtn.addEventListener('click', function() {
+      var text = buildCopyText();
+      var done = function() {
+        copyBtn.classList.add('copied');
+        copyBtn.textContent = 'Copied!';
+        setTimeout(function() {
+          copyBtn.classList.remove('copied');
+          copyBtn.textContent = 'Copy everything';
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done); });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+
+    function fallbackCopy(text, done) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); }
+      catch (e) { alert('Copy failed — select the text manually.'); }
+      document.body.removeChild(ta);
+    }
+
+    /* ---- Two-tap confirm Clear ---- */
+    var clearBtn = document.getElementById('clear-btn');
+    var clearArmed = false, clearTimer = null;
+    clearBtn.addEventListener('click', function() {
+      if (!clearArmed) {
+        clearArmed = true;
+        clearBtn.textContent = 'Confirm?';
+        clearBtn.classList.add('confirm');
+        clearTimer = setTimeout(function() {
+          clearArmed = false;
+          clearBtn.textContent = 'Clear';
+          clearBtn.classList.remove('confirm');
+        }, 3000);
+      } else {
+        clearTimeout(clearTimer);
+        clearArmed = false;
+        clearBtn.textContent = 'Clear';
+        clearBtn.classList.remove('confirm');
+        FIELDS.forEach(function(ta) { ta.value = ''; autoGrow(ta); });
+        storageRemove();
+      }
+    });
+
+    /* ---- Init ---- */
+    document.getElementById('year').textContent = new Date().getFullYear();
+    load();
+    FIELDS.forEach(autoGrow);
+
+    /* ---- Splash auto-dismiss (< 1s) ---- */
+    (function() {
+      var splash = document.getElementById('splash');
+      if (!splash) return;
+      setTimeout(function() {
+        splash.classList.add('hide');
+        setTimeout(function() { splash.remove(); }, 400);
+      }, 650);
+    })();
+
+    /* ---- Service worker for offline use ---- */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').catch(function() { /* offline is a bonus */ });
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#FBF6EE" />
+  <title>Contact — Conversation Guide</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    @font-face{ font-family:"Newsreader"; src:url("fonts/newsreader-normal.woff2") format("woff2"); font-weight:200 800; font-style:normal; font-display:swap; }
+    @font-face{ font-family:"Newsreader"; src:url("fonts/newsreader-italic.woff2") format("woff2"); font-weight:200 800; font-style:italic; font-display:swap; }
+    :root { --est-blue:#A85638; --accent:#BF6A4A; --ink:#2E2A25; --muted:#857A6C; --line:#EBE3D4; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; max-width: 100%; overflow-x: clip; overflow-y: visible;
+      background: #FBF6EE; color: var(--ink);
+      font: 18px/1.6 "Newsreader", Georgia, "Times New Roman", serif;
+    }
+    a { color: var(--est-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .header {
+      background: var(--est-blue); color: #fff; padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .header .header-title { font-size: 1.05rem; font-weight: 700; display:inline-flex; align-items:center; gap:.4em; }
+    .header a.header-title { font-size: 1.05rem; opacity: 1; }
+    .header-mark { width:1.15em; height:1.15em; flex:0 0 auto; transform:translateY(-0.02em); }
+    .header a { color: #fff; font-size: .9rem; opacity: .9; }
+    .wrap { max-width: 640px; margin: 36px auto; padding: 0 22px 60px 22px; }
+    h1 { font-size: 1.9rem; font-weight: 700; color: var(--est-blue); margin: 0 0 18px 0; }
+    p { margin: 0 0 18px 0; }
+    .contact-form { margin: 28px 0; }
+    .form-group { margin: 0 0 20px 0; }
+    label { display: block; margin: 0 0 6px 0; font-weight: 600; font-size: 0.95rem; color: var(--est-blue); }
+    input, textarea { width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 6px; font: inherit; color: var(--ink); background: #fff; }
+    input:focus, textarea:focus { outline: none; border-color: var(--est-blue); box-shadow: 0 0 0 3px rgba(168, 86, 56, 0.1); }
+    textarea { resize: vertical; min-height: 120px; }
+    button { background: var(--est-blue); color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; font-size: 1rem; }
+    button:hover { opacity: 0.9; }
+    .hp { display: none; }
+    .message-status { padding: 14px; border-radius: 6px; margin: 20px 0; text-align: center; }
+    .success { background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784; }
+    .error { background: #ffebee; color: #c62828; border: 1px solid #ef5350; }
+    .footer {
+      margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
+      text-align: center; font-size: .88rem; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/" class="header-title"><svg class="header-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 8V6.1A2.6 2.6 0 0 0 11.9 3.5H6.1A2.6 2.6 0 0 0 3.5 6.1V8.9A2.6 2.6 0 0 0 6.1 11.5H9"/><rect x="9" y="8" width="11.5" height="8.5" rx="2.6"/><path d="M16 16.5l1.8 3.1-4-3.1"/></svg>Conversation Guide</a>
+    <div style="flex:1"></div>
+    <a href="/">&larr; Back</a>
+  </div>
+
+  <div class="wrap">
+    <h1>Contact</h1>
+
+    <p>Have a question or feedback about Conversation Guide? We'd love to hear from you.</p>
+
+    <form class="contact-form" id="contactForm">
+      <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off">
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+
+      <button type="submit">Send Message</button>
+      <div id="formStatus"></div>
+    </form>
+
+    <div class="footer">
+      <div><a href="/">&larr; Back to Conversation Guide</a></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const statusDiv = document.getElementById('formStatus');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusDiv.innerHTML = '';
+
+      const formData = new FormData(form);
+      try {
+        const response = await fetch('/contact/submit', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          statusDiv.innerHTML = '<div class="message-status success">Thank you for reaching out. We\'ll get back to you soon!</div>';
+          form.reset();
+        } else {
+          statusDiv.innerHTML = '<div class="message-status error">Something went wrong. Please try again.</div>';
+        }
+      } catch (error) {
+        statusDiv.innerHTML = '<div class="message-status error">Something went wrong. Please try again.</div>';
+      }
+    });
+  </script>
+</body>
+</html>

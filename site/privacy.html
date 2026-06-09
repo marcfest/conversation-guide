@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#FBF6EE" />
+  <title>Privacy — Conversation Guide</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    @font-face{ font-family:"Newsreader"; src:url("fonts/newsreader-normal.woff2") format("woff2"); font-weight:200 800; font-style:normal; font-display:swap; }
+    @font-face{ font-family:"Newsreader"; src:url("fonts/newsreader-italic.woff2") format("woff2"); font-weight:200 800; font-style:italic; font-display:swap; }
+    :root { --est-blue:#A85638; --accent:#BF6A4A; --ink:#2E2A25; --muted:#857A6C; --line:#EBE3D4; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; max-width: 100%; overflow-x: clip; overflow-y: visible;
+      background: #FBF6EE; color: var(--ink);
+      font: 18px/1.6 "Newsreader", Georgia, "Times New Roman", serif;
+    }
+    a { color: var(--est-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .header {
+      background: var(--est-blue); color: #fff; padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .header .header-title { font-size: 1.05rem; font-weight: 800; display:inline-flex; align-items:center; gap:.4em; }
+    .header-mark { width:1.15em; height:1.15em; flex:0 0 auto; transform:translateY(-0.02em); }
+    .header a { color: #fff; font-size: .9rem; opacity: .9; }
+    .wrap { max-width: 700px; margin: 36px auto; padding: 0 22px 60px 22px; }
+    h1 { font-size: 1.7rem; font-weight: 800; color: var(--est-blue); margin: 0 0 6px 0; }
+    .effective { font-size: .88rem; color: var(--muted); margin-bottom: 30px; }
+    h2 {
+      font-size: 1.1rem; font-weight: 700; color: var(--est-blue);
+      margin: 30px 0 9px 0; padding-bottom: 6px; border-bottom: 2px solid var(--line);
+    }
+    p { margin: 0 0 14px 0; }
+    ul { margin: 0 0 14px 0; padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    .highlight-box {
+      background: #F4ECDD; border: 2px solid var(--accent); border-radius: 10px;
+      padding: 16px 20px; margin-bottom: 26px; font-weight: 500;
+    }
+    .footer {
+      margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--line);
+      text-align: center; font-size: .88rem; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title"><svg class="header-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 8V6.1A2.6 2.6 0 0 0 11.9 3.5H6.1A2.6 2.6 0 0 0 3.5 6.1V8.9A2.6 2.6 0 0 0 6.1 11.5H9"/><rect x="9" y="8" width="11.5" height="8.5" rx="2.6"/><path d="M16 16.5l1.8 3.1-4-3.1"/></svg>Conversation Guide</div>
+    <div style="flex:1"></div>
+    <a href="/de/privacy.html" style="margin-right: 14px;">DE</a>
+    <a href="/">&larr; Back</a>
+  </div>
+
+  <div class="wrap">
+    <h1>Privacy</h1>
+    <p class="effective">Effective date: June 2026 &nbsp;·&nbsp; <a href="https://conversation.guide">conversation.guide</a></p>
+
+    <div class="highlight-box">
+      The short version: we do not collect, store, or transmit any personal data. There are no input
+      fields and nothing you do is saved or sent anywhere.
+    </div>
+
+    <h2>What we collect</h2>
+    <p>Nothing. Conversation Guide does not use cookies, analytics, tracking pixels, or any third-party
+      data services.</p>
+
+    <h2>No data stored</h2>
+    <p>Conversation Guide is a reference card — the four questions and two short prompts. There are no
+      input fields, no accounts, and no saved answers. The app does not keep any personal data on your
+      device or anywhere else.</p>
+
+    <h2>No analytics</h2>
+    <p>We do not use Google Analytics, Plausible, Mixpanel, or any other analytics platform. We do not
+      track page views, sessions, or behavior.</p>
+
+    <h2>No cookies</h2>
+    <p>We set no cookies — not for tracking, not for preferences, not for any purpose.</p>
+
+    <h2>Offline use</h2>
+    <p>This app installs a service worker so it can work offline once loaded. The cache holds only the
+      app's own files (this page and its icons) on your device. It transmits nothing about you.</p>
+
+    <h2>Children's privacy</h2>
+    <p>This tool is not directed at children under 13, and we do not knowingly collect any information
+      from children.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If we ever change this policy meaningfully, we will update the effective date above. Since we
+      collect no data, any change can only expand, not reduce, your privacy.</p>
+
+    <h2>Contact</h2>
+    <p>Questions? Reach us at <a href="https://est.io" target="_blank" rel="noopener">est.io</a>.</p>
+
+    <div class="footer">
+      <div>&copy; <span id="year">2026</span> &middot; conversation.guide</div>
+      <div style="margin-top:8px"><a href="/">&larr; Back to Conversation Guide</a></div>
+    </div>
+  </div>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
