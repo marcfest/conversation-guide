@@ -6,3 +6,16 @@
   Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
   Header set Pragma "no-cache"
 </IfModule>
+
+# Pretty URL for the song page: /song -> song.html (no redirect)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^song/?$ song.html [L]
+</IfModule>
+
+# Exception to the dev-mode no-store rule above: the mp3 never changes, and
+# re-downloading 1.4 MB on every play is wasteful. Remove if you need it uncached.
+<FilesMatch "\.mp3$">
+  Header set Cache-Control "public, max-age=604800"
+  Header unset Pragma
+</FilesMatch>

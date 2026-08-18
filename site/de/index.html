@@ -116,7 +116,7 @@
       margin: 20px 0;
       padding: 16px;
       font-style: italic;
-      font-size: 1.35rem;
+      font-size: 1.15rem;
       color: #A85638;
       line-height: 1.3;
       cursor: pointer;
@@ -126,17 +126,65 @@
       display: block;
     }
 
+    .questions-header {
+      margin: 0 0 10px 0;
+      font-size: 1.45rem;
+      font-weight: 450;
+      letter-spacing: 0.08em;
+      color: #2E2A25;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .questions-box {
+      background: #FBF6EE;
+      border: 1px solid #D8CEBC;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px rgba(46, 42, 37, 0.09);
+      padding: 18px 16px 16px;
+      margin-bottom: 20px;
+    }
+
+    .questions-subhead {
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      max-height: 40px;
+      opacity: 1;
+      margin-bottom: 14px;
+      transition: max-height 0.25s ease, opacity 0.2s ease, margin-bottom 0.25s ease;
+    }
+
+    main:not(.listen-active) .questions-subhead {
+      max-height: 0;
+      opacity: 0;
+      margin-bottom: 0;
+    }
+
+    .questions-subhead .follow-pill {
+      cursor: default;
+    }
+
+    .questions-subhead .follow-pill:hover {
+      background: none;
+      border-color: rgba(191, 106, 74, 0.45);
+    }
+
     .questions {
-      list-style: none;
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 6px;
     }
 
-    .questions li {
+    .question-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .question-card {
       display: flex;
       gap: 0.4em;
       align-items: baseline;
@@ -148,15 +196,61 @@
       background: #FFFDF8;
       border: 1px solid #EBE3D4;
       border-radius: 14px;
-      box-shadow: 0 2px 10px rgba(46, 42, 37, 0.06);
+      cursor: pointer;
     }
 
-    .questions li .num {
+    .question-card .num {
       flex: 0 0 auto;
       font-weight: 600;
       font-style: italic;
       color: #BF6A4A;
       font-size: 0.7em;
+    }
+
+    .follow-throughs {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
+    }
+
+    main.listen-active .follow-throughs {
+      max-height: 60px;
+      opacity: 1;
+      padding: 12px 0 6px;
+    }
+
+    .follow-pill {
+      appearance: none;
+      background: none;
+      border: 1.5px solid rgba(191, 106, 74, 0.45);
+      border-radius: 999px;
+      padding: 5px 15px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-style: italic;
+      font-weight: 400;
+      color: #A85638;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+    }
+
+    .follow-pill:hover {
+      background: rgba(191, 106, 74, 0.08);
+      border-color: #BF6A4A;
+    }
+
+    .pill-or {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: #B5A899;
+      user-select: none;
     }
 
     footer {
@@ -240,6 +334,45 @@
       margin-top: 9px;
       font-size: 0.82rem;
       color: #857A6C;
+    }
+
+    .ptr-indicator {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      z-index: 998;
+      width: 42px;
+      height: 42px;
+      margin-left: -21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FBF6EE;
+      border: 1px solid #D8CEBC;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(46, 42, 37, 0.18);
+      color: #A85638;
+      font-size: 1.25rem;
+      transform: translateY(-52px);
+      pointer-events: none;
+    }
+
+    .ptr-indicator.settling {
+      transition: transform 0.2s ease;
+    }
+
+    .ptr-indicator .ptr-arrow {
+      display: block;
+      line-height: 1;
+      transition: transform 0.15s ease;
+    }
+
+    .ptr-indicator.spin .ptr-arrow {
+      animation: ptr-rotate 0.8s linear infinite;
+    }
+
+    @keyframes ptr-rotate {
+      to { transform: rotate(360deg); }
     }
 
     .modal-overlay {
@@ -344,10 +477,6 @@
       cursor: pointer;
     }
 
-    .questions li {
-      cursor: pointer;
-    }
-
     @media (max-width: 480px) {
       .modal-box {
         max-width: calc(100vw - 56px);
@@ -381,12 +510,36 @@
     </header>
 
     <main>
-      <ol class="questions">
-        <li role="button" tabindex="0" aria-label="Was denkst du? Aktivieren für mehr." data-modal="q1"><span class="num">1</span> <span>Was denkst du?</span></li>
-        <li role="button" tabindex="0" aria-label="Was hat dein Denken dazu geprägt? Aktivieren für mehr." data-modal="q2"><span class="num">2</span> <span>Was hat dein Denken dazu geprägt?</span></li>
-        <li role="button" tabindex="0" aria-label="Wie fühlst du dich dabei? Aktivieren für mehr." data-modal="q3"><span class="num">3</span> <span>Wie fühlst du dich dabei?</span></li>
-        <li role="button" tabindex="0" aria-label="Was würde es besser machen? Aktivieren für mehr." data-modal="q4"><span class="num">4</span> <span>Was würde es besser machen?</span></li>
-      </ol>
+      <h2 class="questions-header">DIE VIER FRAGEN</h2>
+      <div class="questions-subhead"><span class="follow-pill">und die Vertiefung</span></div>
+      <div class="questions-box">
+      <div class="questions">
+        <div class="question-group">
+          <div class="question-card" role="button" tabindex="0" aria-label="Was denkst du? Aktivieren für mehr." data-modal="q1"><span class="num">1</span> <span>Was denkst du?</span></div>
+          <div class="follow-throughs">
+            <button class="follow-pill" data-pill="followthrough">wiederholen <span class="pill-or">oder</span> nachfragen</button>
+          </div>
+        </div>
+        <div class="question-group">
+          <div class="question-card" role="button" tabindex="0" aria-label="Was hat dein Denken dazu geprägt? Aktivieren für mehr." data-modal="q2"><span class="num">2</span> <span>Was hat dein Denken dazu geprägt?</span></div>
+          <div class="follow-throughs">
+            <button class="follow-pill" data-pill="followthrough">wiederholen <span class="pill-or">oder</span> nachfragen</button>
+          </div>
+        </div>
+        <div class="question-group">
+          <div class="question-card" role="button" tabindex="0" aria-label="Wie fühlst du dich dabei? Aktivieren für mehr." data-modal="q3"><span class="num">3</span> <span>Wie fühlst du dich dabei?</span></div>
+          <div class="follow-throughs">
+            <button class="follow-pill" data-pill="followthrough">wiederholen <span class="pill-or">oder</span> nachfragen</button>
+          </div>
+        </div>
+        <div class="question-group">
+          <div class="question-card" role="button" tabindex="0" aria-label="Was würde es besser machen? Aktivieren für mehr." data-modal="q4"><span class="num">4</span> <span>Was würde es besser machen?</span></div>
+          <div class="follow-throughs">
+            <button class="follow-pill" data-pill="followthrough">wiederholen <span class="pill-or">oder</span> nachfragen</button>
+          </div>
+        </div>
+      </div>
+      </div>
     </main>
 
     <footer>
@@ -545,6 +698,19 @@
     </div>
   </div>
 
+  <!-- Follow-through modals -->
+  <div class="modal-overlay" id="modal-followthrough" role="dialog" aria-labelledby="modal-followthrough-title" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Schließen">×</button>
+      <h2 class="modal-title" id="modal-followthrough-title">Vertiefung</h2>
+      <div class="modal-body">
+        <p><strong>Wiederholen.</strong> Bevor du weitergehst, fasse das Gehörte in deinen eigenen Worten zusammen. „Was ich höre, ist..." oder einfach „Es klingt, als ob..." Du musst es nicht perfekt wiedergeben – der Punkt ist zu zeigen, dass du wirklich zugehört hast, und der anderen Person die Möglichkeit zu geben, etwas hinzuzufügen oder zu korrigieren.</p>
+        <p><strong>Nachfragen.</strong> Stelle vor dem Weitergehen eine Nachfrage aus echter Neugier – etwas, das ihre Antwort dich fragen ließ. Das kann man nicht vortäuschen. Wenn du wirklich zugehört hast, gibt es immer etwas.</p>
+        <p>Mach nach jeder Antwort mindestens eines von beidem. Wiederholen zeigt dir, ob du wirklich verstanden hast, und eine echte Nachfrage ist das sicherste Zeichen, dass du wirklich aufgepasst hast – und sie macht das Gespräch auch für dich interessanter.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
     const guidanceTexts = {
       listen: "Stelle die Fragen eine nach der anderen. Wiederhole nach jeder Antwort, was du gehört hast. Wenn es mehr zu sagen gibt, stelle eine Nachfrage. Bleib in dieser Phase für alle vier, dann wechsel zu Antworten.",
@@ -561,6 +727,7 @@
       buttons.forEach(b => {
         b.setAttribute('aria-pressed', String(b.dataset.lens === activeLens));
       });
+      document.querySelector('main').classList.toggle('listen-active', lens === 'listen');
       guidance.textContent = guidanceTexts[activeLens];
       guidance.classList.add('show');
     }
@@ -619,23 +786,31 @@
     });
 
     // Question modals (lens-dependent)
-    document.querySelectorAll('.questions li').forEach(li => {
-      li.addEventListener('click', () => {
-        const modalId = li.dataset.modal;
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const modalId = card.dataset.modal;
         if (modalId) {
           const lens = activeLens || 'listen';
           openModal('modal-' + modalId + '-' + lens);
         }
       });
-      li.addEventListener('keydown', (e) => {
+      card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          const modalId = li.dataset.modal;
+          const modalId = card.dataset.modal;
           if (modalId) {
             const lens = activeLens || 'listen';
             openModal('modal-' + modalId + '-' + lens);
           }
         }
+      });
+    });
+
+    // Follow-through pill modals
+    document.querySelectorAll('.follow-pill').forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal('modal-' + pill.dataset.pill);
       });
     });
 
@@ -677,6 +852,62 @@
         qrOverlay.classList.remove('show');
       }
     });
+
+    // Pull-to-refresh (touch devices, incl. installed PWA where the browser gesture is unavailable)
+    (function() {
+      if (!('ontouchstart' in window)) return;
+      var THRESHOLD = 70;
+      var indicator = document.createElement('div');
+      indicator.className = 'ptr-indicator';
+      indicator.innerHTML = '<span class="ptr-arrow">↓</span>';
+      document.body.appendChild(indicator);
+      var arrow = indicator.querySelector('.ptr-arrow');
+      var startY = null, pulling = false, armed = false;
+
+      document.addEventListener('touchstart', function(e) {
+        var overlayOpen = document.querySelector('.modal-overlay.show, .qr-overlay.show');
+        if (window.scrollY <= 0 && !overlayOpen) {
+          startY = e.touches[0].clientY;
+          pulling = true;
+          armed = false;
+          indicator.classList.remove('settling', 'spin');
+          arrow.textContent = '↓';
+        } else {
+          pulling = false;
+          startY = null;
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchmove', function(e) {
+        if (!pulling || startY === null) return;
+        var dy = e.touches[0].clientY - startY;
+        if (dy <= 0 || window.scrollY > 0) {
+          indicator.style.transform = 'translateY(-52px)';
+          armed = false;
+          return;
+        }
+        var pull = Math.min(dy * 0.45, 110);
+        indicator.style.transform = 'translateY(' + (pull - 52) + 'px)';
+        armed = pull >= THRESHOLD;
+        arrow.style.transform = armed ? 'rotate(180deg)' : 'rotate(0deg)';
+      }, { passive: true });
+
+      document.addEventListener('touchend', function() {
+        if (!pulling) return;
+        pulling = false;
+        indicator.classList.add('settling');
+        if (armed) {
+          indicator.style.transform = 'translateY(16px)';
+          arrow.textContent = '↻';
+          arrow.style.transform = '';
+          indicator.classList.add('spin');
+          setTimeout(function() { location.reload(); }, 200);
+        } else {
+          indicator.style.transform = 'translateY(-52px)';
+        }
+        startY = null;
+      }, { passive: true });
+    })();
 
     // Unregister any existing service workers (dev mode)
     if ('serviceWorker' in navigator) {

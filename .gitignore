@@ -17,3 +17,13 @@ backups/
 # IDE
 .vscode/
 .idea/
+
+# Runtime
+*.pid
+
+# Local dev/backup snapshots inside site/ (not for deploy)
+site/bk1/
+site/dev1/
+
+# Python venv
+venv/
